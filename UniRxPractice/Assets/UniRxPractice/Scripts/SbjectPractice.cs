@@ -11,6 +11,7 @@ public class SbjectPractice : MonoBehaviour
     {
         SbjectPractice1();
         SbjectPractice2();
+        SbjectPractice3();
     }
 
     // 練習１
@@ -41,6 +42,24 @@ public class SbjectPractice : MonoBehaviour
         //イベントメッセージ発行
         //プレイヤが触れたオブジェクトのTagが発行されている、みたいな想定
         subject.OnNext("Enemy");
+        subject.OnNext("Wall");
+        subject.OnNext("Wall");
+        subject.OnNext("Enemy");
+        subject.OnNext("Enemy");
+    }
+
+    // 練習３
+    void SbjectPractice3()
+    {
+        //文字列を発行するSubject
+        Subject<string> subject = new Subject<string>();
+
+        subject
+          .Where(x => x == "Enemy") //←フィルタリングオペレータ
+          .Subscribe(x => Debug.Log(string.Format("プレイヤが{0}に衝突しました", x)));
+
+        //イベントメッセージ発行
+        //プレイヤが触れたオブジェクトのTagが発行されている、みたいな想定
         subject.OnNext("Wall");
         subject.OnNext("Wall");
         subject.OnNext("Enemy");
