@@ -9,6 +9,12 @@ public class SbjectPractice : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        SbjectPractice1();
+    }
+
+    // 練習１
+    void SbjectPractice1()
+    {
         //Subject作成
         Subject<string> subject = new Subject<string>();
 
@@ -20,11 +26,5 @@ public class SbjectPractice : MonoBehaviour
         //イベントメッセージ発行
         subject.OnNext("こんにちは");
         subject.OnNext("おはよう");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
