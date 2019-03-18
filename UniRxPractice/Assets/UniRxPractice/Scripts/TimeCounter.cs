@@ -1,25 +1,24 @@
 ﻿using System.Collections;
+using UniRx;
 using UnityEngine;
+using System; // .NET 4.xモードで動かす場合は必須
 
 /// <summary>
-/// 100からカウントダウンし値を通知するサンプル
+/// 100からカウントダウンし、Debug.Logにその値を表示するサンプル
 /// </summary>
 public class TimeCounter : MonoBehaviour
 {
-    /// <summary>
-    /// イベントハンドラ（イベントメッセージの型定義）
-    /// </summary>
-    public delegate void TimerEventHandler(int time);
+    //イベントを発行する核となるインスタンス
+    private Subject<int> timerSubject = new Subject<int>();
 
-    /// <summary>
-    /// イベント
-    /// </summary>
-    public event TimerEventHandler OnTimeChanged;
-
+    //イベントの購読側だけを公開
+    public IObservable<int> OnTimeChanged
+    {
+        get { return timerSubject; }
+    }
 
     void Start()
     {
-        //タイマ起動
         StartCoroutine(TimerCoroutine());
     }
 
@@ -30,8 +29,9 @@ public class TimeCounter : MonoBehaviour
         while (time > 0)
         {
             time--;
-            //イベント通知
-            OnTimeChanged(time);
+
+            //イベントを発行
+            timerSubject.OnNext(time);
 
             //1秒待つ
             yield return new WaitForSeconds(1);

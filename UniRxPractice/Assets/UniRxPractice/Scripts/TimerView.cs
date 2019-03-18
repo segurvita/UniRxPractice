@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UniRx;
+using System;
 
 public class TimerView : MonoBehaviour
 {
@@ -11,10 +13,10 @@ public class TimerView : MonoBehaviour
     void Start()
     {
         //タイマのカウンタが変化したイベントを受けてuGUI Textを更新する
-        timeCounter.OnTimeChanged += time => // =>は「ラムダ式」と呼ばれる匿名関数の記法
+        timeCounter.OnTimeChanged.Subscribe(time =>
         {
             //現在のタイマ値をUIに反映する
             counterText.text = time.ToString();
-        };
+        });
     }
 }
