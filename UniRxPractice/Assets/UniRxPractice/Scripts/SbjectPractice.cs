@@ -10,6 +10,7 @@ public class SbjectPractice : MonoBehaviour
     void Start()
     {
         SbjectPractice1();
+        SbjectPractice2();
     }
 
     // 練習１
@@ -26,5 +27,23 @@ public class SbjectPractice : MonoBehaviour
         //イベントメッセージ発行
         subject.OnNext("こんにちは");
         subject.OnNext("おはよう");
+    }
+
+    // 練習２
+    void SbjectPractice2()
+    {
+        //文字列を発行するSubject
+        Subject<string> subject = new Subject<string>();
+
+        //文字列をコンソールに表示
+        subject.Subscribe(x => Debug.Log(string.Format("プレイヤが{0}に衝突しました", x)));
+
+        //イベントメッセージ発行
+        //プレイヤが触れたオブジェクトのTagが発行されている、みたいな想定
+        subject.OnNext("Enemy");
+        subject.OnNext("Wall");
+        subject.OnNext("Wall");
+        subject.OnNext("Enemy");
+        subject.OnNext("Enemy");
     }
 }
