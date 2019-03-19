@@ -20,6 +20,7 @@ public class SbjectPractice : MonoBehaviour
         ExceptionPractice();
         ErrorRetryPractice();
         OnCompletedPractice();
+        DisposePractice();
     }
 
     // メッセージ送信の練習
@@ -188,6 +189,26 @@ public class SbjectPractice : MonoBehaviour
         );
         subject.OnNext(1);
         subject.OnNext(2);
+        subject.OnCompleted();
+
+        Debug.Log("====================");
+    }
+
+    // Dispose()でストリームの購読終了
+    void DisposePractice()
+    {
+        var subject = new Subject<int>();
+
+        //IDisposeを保存
+        var disposable = subject.Subscribe(x => Debug.Log(x), () => Debug.Log("OnCompleted"));
+
+        subject.OnNext(1);
+        subject.OnNext(2);
+
+        //購読終了
+        disposable.Dispose();
+
+        subject.OnNext(3);
         subject.OnCompleted();
 
         Debug.Log("====================");
