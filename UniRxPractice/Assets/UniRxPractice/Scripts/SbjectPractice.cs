@@ -9,14 +9,15 @@ public class SbjectPractice : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        SbjectPractice1();
-        SbjectPractice2();
-        SbjectPractice3();
-        SbjectPractice4();
+        // UniRx入門 その1
+        SendMessagePractice();
+        SendParameterPractice();
+        FilterPractice();
+        OriginalFilterPractice();
     }
 
-    // 練習１
-    void SbjectPractice1()
+    // メッセージ送信の練習
+    void SendMessagePractice()
     {
         //Subject作成
         Subject<string> subject = new Subject<string>();
@@ -29,10 +30,12 @@ public class SbjectPractice : MonoBehaviour
         //イベントメッセージ発行
         subject.OnNext("こんにちは");
         subject.OnNext("おはよう");
+
+        Debug.Log("====================");
     }
 
-    // 練習２
-    void SbjectPractice2()
+    // パラメータ送信の練習
+    void SendParameterPractice()
     {
         //文字列を発行するSubject
         Subject<string> subject = new Subject<string>();
@@ -47,10 +50,12 @@ public class SbjectPractice : MonoBehaviour
         subject.OnNext("Wall");
         subject.OnNext("Enemy");
         subject.OnNext("Enemy");
+
+        Debug.Log("====================");
     }
 
-    // 練習３
-    void SbjectPractice3()
+    // フィルタの練習
+    void FilterPractice()
     {
         //文字列を発行するSubject
         Subject<string> subject = new Subject<string>();
@@ -65,10 +70,12 @@ public class SbjectPractice : MonoBehaviour
         subject.OnNext("Wall");
         subject.OnNext("Enemy");
         subject.OnNext("Enemy");
+
+        Debug.Log("====================");
     }
 
-    // 練習４
-    void SbjectPractice4()
+    // 自作フィルタの練習
+    void OriginalFilterPractice()
     {
         //文字列を発行するSubject
         Subject<string> subject = new Subject<string>();
@@ -84,5 +91,7 @@ public class SbjectPractice : MonoBehaviour
         subject.OnNext("Wall");
         subject.OnNext("Enemy");
         subject.OnNext("Enemy");
+
+        Debug.Log("====================");
     }
 }
