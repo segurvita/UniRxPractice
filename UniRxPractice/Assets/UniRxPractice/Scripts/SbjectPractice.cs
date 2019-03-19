@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UniRx;
 using UnityEngine;
-using UniRx;
 
 public class SbjectPractice : MonoBehaviour
 {
