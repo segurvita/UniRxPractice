@@ -21,6 +21,7 @@ public class SbjectPractice : MonoBehaviour
         ErrorRetryPractice();
         OnCompletedPractice();
         DisposePractice();
+        DisposeSpecificPractice();
     }
 
     // メッセージ送信の練習
@@ -207,6 +208,26 @@ public class SbjectPractice : MonoBehaviour
 
         //購読終了
         disposable.Dispose();
+
+        subject.OnNext(3);
+        subject.OnCompleted();
+
+        Debug.Log("====================");
+    }
+
+    // 特定のストリームのみ購読中止
+    void DisposeSpecificPractice()
+    {
+        var subject = new Subject<int>();
+
+        //IDisposeを保存
+        var disposable1 = subject.Subscribe(x => Debug.Log("ストリーム1:" + x), () => Debug.Log("OnCompleted"));
+        var disposable2 = subject.Subscribe(x => Debug.Log("ストリーム2:" + x), () => Debug.Log("OnCompleted"));
+        subject.OnNext(1);
+        subject.OnNext(2);
+
+        //ストリーム1だけ購読終了
+        disposable1.Dispose();
 
         subject.OnNext(3);
         subject.OnCompleted();
