@@ -21,7 +21,7 @@ namespace PlayerPractice
                 {
                     //タイマが0になったら初期座標に戻る
                     transform.position = Vector3.zero;
-                });
+                }).AddTo(gameObject); //指定のgameObjectが破棄されたらDisposeする
         }
 
         void Update()
