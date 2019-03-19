@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UniRx;
 using UnityEngine;
-using UniRx;
 
 public class SbjectPractice : MonoBehaviour
 {
@@ -9,14 +7,19 @@ public class SbjectPractice : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        SbjectPractice1();
-        SbjectPractice2();
-        SbjectPractice3();
-        SbjectPractice4();
+        // UniRx入門 その1
+        SendMessagePractice();
+        SendParameterPractice();
+        FilterPractice();
+        OriginalFilterPractice();
+
+        // UniRx入門 その2
+        SendIntegerPractice();
+        SendUnitPractice();
     }
 
-    // 練習１
-    void SbjectPractice1()
+    // メッセージ送信の練習
+    void SendMessagePractice()
     {
         //Subject作成
         Subject<string> subject = new Subject<string>();
@@ -29,10 +32,12 @@ public class SbjectPractice : MonoBehaviour
         //イベントメッセージ発行
         subject.OnNext("こんにちは");
         subject.OnNext("おはよう");
+
+        Debug.Log("====================");
     }
 
-    // 練習２
-    void SbjectPractice2()
+    // パラメータ送信の練習
+    void SendParameterPractice()
     {
         //文字列を発行するSubject
         Subject<string> subject = new Subject<string>();
@@ -47,10 +52,12 @@ public class SbjectPractice : MonoBehaviour
         subject.OnNext("Wall");
         subject.OnNext("Enemy");
         subject.OnNext("Enemy");
+
+        Debug.Log("====================");
     }
 
-    // 練習３
-    void SbjectPractice3()
+    // フィルタの練習
+    void FilterPractice()
     {
         //文字列を発行するSubject
         Subject<string> subject = new Subject<string>();
@@ -65,10 +72,12 @@ public class SbjectPractice : MonoBehaviour
         subject.OnNext("Wall");
         subject.OnNext("Enemy");
         subject.OnNext("Enemy");
+
+        Debug.Log("====================");
     }
 
-    // 練習４
-    void SbjectPractice4()
+    // 自作フィルタの練習
+    void OriginalFilterPractice()
     {
         //文字列を発行するSubject
         Subject<string> subject = new Subject<string>();
@@ -84,5 +93,35 @@ public class SbjectPractice : MonoBehaviour
         subject.OnNext("Wall");
         subject.OnNext("Enemy");
         subject.OnNext("Enemy");
+
+        Debug.Log("====================");
+    }
+
+    // 整数送信の練習
+    void SendIntegerPractice()
+    {
+        var subject = new Subject<int>();
+
+        subject.Subscribe(x => Debug.Log(x));
+        subject.OnNext(1);
+        subject.OnNext(2);
+        subject.OnNext(3);
+        subject.OnCompleted();
+
+        Debug.Log("====================");
+    }
+
+    // 意味のない値の送信の練習
+    void SendUnitPractice()
+    {
+        var subject = new Subject<Unit>();
+
+        subject.Subscribe(x => Debug.Log(x));
+
+        //Unit型はそれ自身は特に意味を持たない
+        //メッセージの内容に意味はなく、イベント通知のタイミングのみが重要な時に利用できる
+        subject.OnNext(Unit.Default);
+
+        Debug.Log("====================");
     }
 }
