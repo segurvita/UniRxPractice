@@ -17,6 +17,7 @@ public class SbjectPractice : MonoBehaviour
 
         // UniRx入門 その2
         SendIntegerPractice();
+        SendUnitPractice();
     }
 
     // メッセージ送信の練習
@@ -108,6 +109,20 @@ public class SbjectPractice : MonoBehaviour
         subject.OnNext(2);
         subject.OnNext(3);
         subject.OnCompleted();
+
+        Debug.Log("====================");
+    }
+
+    // 意味のない値の送信の練習
+    void SendUnitPractice()
+    {
+        var subject = new Subject<Unit>();
+
+        subject.Subscribe(x => Debug.Log(x));
+
+        //Unit型はそれ自身は特に意味を持たない
+        //メッセージの内容に意味はなく、イベント通知のタイミングのみが重要な時に利用できる
+        subject.OnNext(Unit.Default);
 
         Debug.Log("====================");
     }
