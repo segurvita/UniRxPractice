@@ -19,6 +19,7 @@ public class SbjectPractice : MonoBehaviour
         SendUnitPractice();
         ExceptionPractice();
         ErrorRetryPractice();
+        OnCompletedPractice();
     }
 
     // メッセージ送信の練習
@@ -173,6 +174,21 @@ public class SbjectPractice : MonoBehaviour
         stringSubject.OnNext("4");
         stringSubject.OnNext("5");
         stringSubject.OnCompleted();
+
+        Debug.Log("====================");
+    }
+
+    // OnCompletedの練習
+    void OnCompletedPractice()
+    {
+        var subject = new Subject<int>();
+        subject.Subscribe(
+            x => Debug.Log(x),
+            () => Debug.Log("OnCompleted")
+        );
+        subject.OnNext(1);
+        subject.OnNext(2);
+        subject.OnCompleted();
 
         Debug.Log("====================");
     }
