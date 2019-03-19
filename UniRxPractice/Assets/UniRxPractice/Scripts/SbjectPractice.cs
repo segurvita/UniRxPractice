@@ -14,6 +14,9 @@ public class SbjectPractice : MonoBehaviour
         SendParameterPractice();
         FilterPractice();
         OriginalFilterPractice();
+
+        // UniRx入門 その2
+        SendIntegerPractice();
     }
 
     // メッセージ送信の練習
@@ -91,6 +94,20 @@ public class SbjectPractice : MonoBehaviour
         subject.OnNext("Wall");
         subject.OnNext("Enemy");
         subject.OnNext("Enemy");
+
+        Debug.Log("====================");
+    }
+
+    // 整数送信の練習
+    void SendIntegerPractice()
+    {
+        var subject = new Subject<int>();
+
+        subject.Subscribe(x => Debug.Log(x));
+        subject.OnNext(1);
+        subject.OnNext(2);
+        subject.OnNext(3);
+        subject.OnCompleted();
 
         Debug.Log("====================");
     }
