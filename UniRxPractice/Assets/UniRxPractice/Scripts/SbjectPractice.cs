@@ -1,4 +1,5 @@
-﻿using UniRx;
+﻿using System;
+using UniRx;
 using UnityEngine;
 
 public class SbjectPractice : MonoBehaviour
@@ -17,6 +18,7 @@ public class SbjectPractice : MonoBehaviour
         SendIntegerPractice();
         SendUnitPractice();
         ExceptionPractice();
+        ErrorRetryPractice();
     }
 
     // メッセージ送信の練習
@@ -143,6 +145,33 @@ public class SbjectPractice : MonoBehaviour
         stringSubject.OnNext("2");
         stringSubject.OnNext("Hello"); //このメッセージで例外が出る
         stringSubject.OnNext("4");
+        stringSubject.OnCompleted();
+
+        Debug.Log("====================");
+    }
+
+    // 途中で例外が発生したら再購読する練習
+    void ErrorRetryPractice()
+    {
+        var stringSubject = new Subject<string>();
+
+        //文字列をストリームの途中で整数に変換する
+        stringSubject
+            .Select(str => int.Parse(str))
+            .OnErrorRetry((FormatException ex) => //例外の型指定でフィルタリング可能
+            {
+                Debug.Log("例外が発生したため再購読します");
+            })
+            .Subscribe(
+                x => Debug.Log("成功:" + x), //OnNext
+                ex => Debug.Log("例外が発生:" + ex) //OnError
+            );
+
+        stringSubject.OnNext("1");
+        stringSubject.OnNext("2");
+        stringSubject.OnNext("Hello");
+        stringSubject.OnNext("4");
+        stringSubject.OnNext("5");
         stringSubject.OnCompleted();
 
         Debug.Log("====================");
