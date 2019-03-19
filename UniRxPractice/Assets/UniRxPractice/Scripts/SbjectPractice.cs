@@ -1,4 +1,5 @@
-﻿using UniRx;
+﻿using System;
+using UniRx;
 using UnityEngine;
 
 public class SbjectPractice : MonoBehaviour
@@ -16,6 +17,8 @@ public class SbjectPractice : MonoBehaviour
         // UniRx入門 その2
         SendIntegerPractice();
         SendUnitPractice();
+        ExceptionPractice();
+        ErrorRetryPractice();
     }
 
     // メッセージ送信の練習
@@ -121,6 +124,55 @@ public class SbjectPractice : MonoBehaviour
         //Unit型はそれ自身は特に意味を持たない
         //メッセージの内容に意味はなく、イベント通知のタイミングのみが重要な時に利用できる
         subject.OnNext(Unit.Default);
+
+        Debug.Log("====================");
+    }
+
+    // 途中で発生した例外をSubscribeで受け取る練習
+    void ExceptionPractice()
+    {
+        var stringSubject = new Subject<string>();
+
+        //文字列をストリームの途中で整数に変換する
+        stringSubject
+            .Select(str => int.Parse(str)) //数値を表現する文字列以外の場合は例外が出る
+            .Subscribe(
+                x => Debug.Log("成功:" + x), //OnNext
+                ex => Debug.Log("例外が発生:" + ex) //OnError
+            );
+
+        stringSubject.OnNext("1");
+        stringSubject.OnNext("2");
+        stringSubject.OnNext("Hello"); //このメッセージで例外が出る
+        stringSubject.OnNext("4");
+        stringSubject.OnCompleted();
+
+        Debug.Log("====================");
+    }
+
+    // 途中で例外が発生したら再購読する練習
+    void ErrorRetryPractice()
+    {
+        var stringSubject = new Subject<string>();
+
+        //文字列をストリームの途中で整数に変換する
+        stringSubject
+            .Select(str => int.Parse(str))
+            .OnErrorRetry((FormatException ex) => //例外の型指定でフィルタリング可能
+            {
+                Debug.Log("例外が発生したため再購読します");
+            })
+            .Subscribe(
+                x => Debug.Log("成功:" + x), //OnNext
+                ex => Debug.Log("例外が発生:" + ex) //OnError
+            );
+
+        stringSubject.OnNext("1");
+        stringSubject.OnNext("2");
+        stringSubject.OnNext("Hello");
+        stringSubject.OnNext("4");
+        stringSubject.OnNext("5");
+        stringSubject.OnCompleted();
 
         Debug.Log("====================");
     }
