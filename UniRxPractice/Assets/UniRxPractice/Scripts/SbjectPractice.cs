@@ -30,6 +30,7 @@ public class SbjectPractice : MonoBehaviour
         ReactiveCollectionPractice();
         ObservableCreatePractice();
         ObservableStartPractice();
+        ObservableTimerPractice();
     }
 
     // メッセージ送信の練習
@@ -330,6 +331,22 @@ public class SbjectPractice : MonoBehaviour
         })
         .ObserveOnMainThread() //メッセージを別スレッドからUnityメインスレッドに切り替える
         .Subscribe(x => Debug.Log(x));
+
+        Debug.Log("====================");
+    }
+
+    // ObservableTimerの練習
+    void ObservableTimerPractice()
+    {
+        //5秒後に1回だけメッセージを発行して終了
+        Observable.Timer(System.TimeSpan.FromSeconds(5))
+            .Subscribe(_ => Debug.Log("5秒経過しました"));
+
+        //5秒後から1秒おきにメッセージを発行する
+        //自分で停止させない限りずっと動き続ける
+        Observable.Timer(System.TimeSpan.FromSeconds(5), System.TimeSpan.FromSeconds(1))
+            .Subscribe(_ => Debug.Log("一定間隔で実行されています"))
+            .AddTo(gameObject);
 
         Debug.Log("====================");
     }
