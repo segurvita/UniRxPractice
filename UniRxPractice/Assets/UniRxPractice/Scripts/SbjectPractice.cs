@@ -342,9 +342,10 @@ public class SbjectPractice : MonoBehaviour
         Observable.Timer(System.TimeSpan.FromSeconds(5))
             .Subscribe(_ => Debug.Log("5秒経過しました"));
 
-        //5秒後から1秒おきにメッセージを発行する
-        //自分で停止させない限りずっと動き続ける
+        //5秒後から1秒おきに5秒間メッセージを発行する
         Observable.Timer(System.TimeSpan.FromSeconds(5), System.TimeSpan.FromSeconds(1))
+            .Select(x => (int)(5 - x))      //xは起動してからの秒数
+            .TakeWhile(x => x > 0)          //0秒超過の間はOnNext、0になったらOnComplete
             .Subscribe(_ => Debug.Log("一定間隔で実行されています"))
             .AddTo(gameObject);
 
