@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Net;
 using UniRx;
 using UnityEngine;
 
@@ -27,6 +29,7 @@ public class SbjectPractice : MonoBehaviour
         ReactivePropertyPractice();
         ReactiveCollectionPractice();
         ObservableCreatePractice();
+        ObservableStartPractice();
     }
 
     // メッセージ送信の練習
@@ -307,6 +310,26 @@ public class SbjectPractice : MonoBehaviour
                 Debug.Log("Dispose");
             });
         }).Subscribe(x => Debug.Log(x));
+
+        Debug.Log("====================");
+    }
+
+    // ObservableStartの練習
+    void ObservableStartPractice()
+    {
+        //与えられたブロック内部を別スレッドで実行する
+        Observable.Start(() =>
+        {
+            //GoogleのTOPページをHTTPでGETする
+            var req = (HttpWebRequest)WebRequest.Create("https://google.com");
+            var res = (HttpWebResponse)req.GetResponse();
+            using (var reader = new StreamReader(res.GetResponseStream()))
+            {
+                return reader.ReadToEnd();
+            }
+        })
+        .ObserveOnMainThread() //メッセージを別スレッドからUnityメインスレッドに切り替える
+        .Subscribe(x => Debug.Log(x));
 
         Debug.Log("====================");
     }
