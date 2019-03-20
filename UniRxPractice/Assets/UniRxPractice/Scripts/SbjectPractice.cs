@@ -26,6 +26,7 @@ public class SbjectPractice : MonoBehaviour
         // UniRx入門 その3
         ReactivePropertyPractice();
         ReactiveCollectionPractice();
+        ObservableCreatePractice();
     }
 
     // メッセージ送信の練習
@@ -281,6 +282,31 @@ public class SbjectPractice : MonoBehaviour
         collection.Add("Baseball");
         collection.Add("Cherry");
         collection.Remove("Apple");
+
+        Debug.Log("====================");
+    }
+
+    // ObservableCreateの練習
+    void ObservableCreatePractice()
+    {
+        //0から100まで10刻みで値を発行するストリーム
+        Observable.Create<int>(observer =>
+        {
+            Debug.Log("Start");
+
+            for (var i = 0; i <= 100; i += 10)
+            {
+                observer.OnNext(i);
+            }
+
+            Debug.Log("Finished");
+            observer.OnCompleted();
+            return Disposable.Create(() =>
+            {
+                //終了時の処理
+                Debug.Log("Dispose");
+            });
+        }).Subscribe(x => Debug.Log(x));
 
         Debug.Log("====================");
     }
