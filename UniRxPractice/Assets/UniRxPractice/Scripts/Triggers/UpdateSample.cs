@@ -1,15 +1,22 @@
 ﻿using UnityEngine;
 using UniRx;
-using UniRx.Triggers; //このusingが必要
+using UniRx.Triggers;
 
 public class UpdateSample : MonoBehaviour
 {
     void Start()
     {
-        // UpdateAsObservableはComponentに対する
-        // 拡張メソッドとして定義されているため、呼び出す際は
-        // "this."が必要
         this.UpdateAsObservable()
-            .Subscribe(_ => Debug.Log("Update!"));
+            .Subscribe(
+                _ => Debug.Log("Update!"), //OnNext
+                () => Debug.Log("OnCompleted") //OnCompleted
+            );
+
+        // OnDestoryを受けてログに出す
+        this.OnDestroyAsObservable()
+            .Subscribe(_ => Debug.Log("Destroy!"));
+
+        // 1秒後に破棄
+        Destroy(gameObject, 1.0f);
     }
 }
