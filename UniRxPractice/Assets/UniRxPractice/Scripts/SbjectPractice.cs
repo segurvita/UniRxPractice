@@ -22,6 +22,9 @@ public class SbjectPractice : MonoBehaviour
         OnCompletedPractice();
         DisposePractice();
         DisposeSpecificPractice();
+
+        // UniRx入門 その3
+        ReactivePropertyPractice();
     }
 
     // メッセージ送信の練習
@@ -231,6 +234,25 @@ public class SbjectPractice : MonoBehaviour
 
         subject.OnNext(3);
         subject.OnCompleted();
+
+        Debug.Log("====================");
+    }
+
+    // ReactiveProperty<T>の練習
+    void ReactivePropertyPractice()
+    {
+        //int型のReactiveProperty
+        var rp = new ReactiveProperty<int>(10); //初期値を指定可能
+
+        //普通に代入したり、値を読み取ることができる
+        rp.Value = 20;
+        var currentValue = rp.Value; //20
+
+        //Subscribeもできる(Subscribe時に現在の値も発行される）
+        rp.Subscribe(x => Debug.Log(x));
+
+        //値を書き換えた時にOnNextが飛ぶ
+        rp.Value = 30;
 
         Debug.Log("====================");
     }
