@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Net;
 using UniRx;
 using UnityEngine;
 
@@ -26,6 +28,9 @@ public class SbjectPractice : MonoBehaviour
         // UniRx入門 その3
         ReactivePropertyPractice();
         ReactiveCollectionPractice();
+        ObservableCreatePractice();
+        ObservableStartPractice();
+        ObservableTimerPractice();
     }
 
     // メッセージ送信の練習
@@ -281,6 +286,68 @@ public class SbjectPractice : MonoBehaviour
         collection.Add("Baseball");
         collection.Add("Cherry");
         collection.Remove("Apple");
+
+        Debug.Log("====================");
+    }
+
+    // ObservableCreateの練習
+    void ObservableCreatePractice()
+    {
+        //0から100まで10刻みで値を発行するストリーム
+        Observable.Create<int>(observer =>
+        {
+            Debug.Log("Start");
+
+            for (var i = 0; i <= 100; i += 10)
+            {
+                observer.OnNext(i);
+            }
+
+            Debug.Log("Finished");
+            observer.OnCompleted();
+            return Disposable.Create(() =>
+            {
+                //終了時の処理
+                Debug.Log("Dispose");
+            });
+        }).Subscribe(x => Debug.Log(x));
+
+        Debug.Log("====================");
+    }
+
+    // ObservableStartの練習
+    void ObservableStartPractice()
+    {
+        //与えられたブロック内部を別スレッドで実行する
+        Observable.Start(() =>
+        {
+            //GoogleのTOPページをHTTPでGETする
+            var req = (HttpWebRequest)WebRequest.Create("https://google.com");
+            var res = (HttpWebResponse)req.GetResponse();
+            using (var reader = new StreamReader(res.GetResponseStream()))
+            {
+                return reader.ReadToEnd();
+            }
+        })
+        .ObserveOnMainThread() //メッセージを別スレッドからUnityメインスレッドに切り替える
+        .Subscribe(x => Debug.Log(x));
+
+        Debug.Log("====================");
+    }
+
+    // ObservableTimerの練習
+    void ObservableTimerPractice()
+    {
+        //5秒後に1回だけメッセージを発行して終了
+        Observable.Timer(System.TimeSpan.FromSeconds(5))
+            .Subscribe(_ => Debug.Log("5秒経過しました"));
+
+        //5秒後から1秒おきに5秒間メッセージを発行する
+        Observable.Timer(System.TimeSpan.FromSeconds(5), System.TimeSpan.FromSeconds(1))
+            .Select(x => (int)(5 - x))      //xは起動してからの秒数
+            .TakeWhile(x => x > 0)          //0秒超過の間はOnNext、0になったらOnComplete
+            .Subscribe(_ => Debug.Log("一定間隔で実行されています"))
+            .AddTo(gameObject);
 
         Debug.Log("====================");
     }
