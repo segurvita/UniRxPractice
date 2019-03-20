@@ -25,6 +25,7 @@ public class SbjectPractice : MonoBehaviour
 
         // UniRx入門 その3
         ReactivePropertyPractice();
+        ReactiveCollectionPractice();
     }
 
     // メッセージ送信の練習
@@ -253,6 +254,33 @@ public class SbjectPractice : MonoBehaviour
 
         //値を書き換えた時にOnNextが飛ぶ
         rp.Value = 30;
+
+        Debug.Log("====================");
+    }
+
+    // ReactiveCollectionの練習
+    void ReactiveCollectionPractice()
+    {
+        var collection = new ReactiveCollection<string>();
+
+        collection
+            .ObserveAdd()
+            .Subscribe(x =>
+            {
+                Debug.Log(string.Format("Add [{0}] = {1}", x.Index, x.Value));
+            });
+
+        collection
+            .ObserveRemove()
+            .Subscribe(x =>
+            {
+                Debug.Log(string.Format("Remove [{0}] = {1}", x.Index, x.Value));
+            });
+
+        collection.Add("Apple");
+        collection.Add("Baseball");
+        collection.Add("Cherry");
+        collection.Remove("Apple");
 
         Debug.Log("====================");
     }
